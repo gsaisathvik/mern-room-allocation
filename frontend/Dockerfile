@@ -9,13 +9,13 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
-# Install vite globally to ensure it's available
-RUN npm install -g vite
+# Ensure vite binary is executable
+RUN chmod +x node_modules/.bin/vite || true
 
 # Copy rest of the code
 COPY . .
 
-# Build the frontend
+# Build the frontend (still as root so vite works)
 RUN npm run build
 
 
