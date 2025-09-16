@@ -3,13 +3,17 @@ FROM node:18-alpine AS build
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
-COPY . .
+
+# Fix permissions and rebuild
 USER node
-RUN ["npm", "run", "build"] # <-- Change this line
+RUN mkdir /home/node/.npm && chown node:node /home/node/.npm
+COPY --chown=node:node . /home/node/app
+WORKDIR /home/node/app
+RUN npm run build
 
 # Step 2: Serve with Nginx
 FROM nginx:alpine
 WORKDIR /usr/share/nginx/html
-COPY --from=build /app/dist .
+COPY --from=build /home/node/app/dist .
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
