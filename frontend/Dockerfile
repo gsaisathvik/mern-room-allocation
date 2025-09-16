@@ -2,7 +2,12 @@
 FROM node:18-alpine AS build
 WORKDIR /app
 COPY package*.json ./
-RUN npm install && npm run build
+RUN npm install
+COPY . .
+# Comment out the line below
+# RUN npm run build
+# Add a command to keep the container running
+CMD tail -f /dev/null
 
 # Step 2: Serve with Nginx
 FROM nginx:alpine
