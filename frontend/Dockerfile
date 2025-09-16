@@ -3,13 +3,13 @@ FROM node:18-alpine AS build
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
-COPY . .
-# Temporarily switch back to root to force the build
-# This is a less secure but reliable fix
-USER root 
+
+# Copy source code and change ownership
+COPY --chown=node:node . .
+
+# Switch user and run the build
+USER node
 RUN npm run build
-# Switch to a non-root user for the final image if needed
-USER node 
 
 # Step 2: Serve with Nginx
 FROM nginx:alpine
