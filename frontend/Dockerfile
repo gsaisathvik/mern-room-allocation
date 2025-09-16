@@ -6,17 +6,16 @@ WORKDIR /app
 # Copy package.json first
 COPY package*.json ./
 
-# Fix vite binary permissions
-RUN chmod +x node_modules/.bin/vite
-
-# Then build
-RUN npm run build
-
+# Install dependencies
+RUN npm install
 
 # Copy rest of the code
 COPY . .
 
-# Build the app (run as root, not as node user)
+# Fix vite binary permissions
+RUN chmod +x node_modules/.bin/vite
+
+# Then build
 RUN npm run build
 
 
