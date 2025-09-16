@@ -4,7 +4,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-USER node  # <-- ADD THIS LINE
+USER node  # Use a non-root user for better security
 RUN npm run build
 
 # Step 2: Serve with Nginx
