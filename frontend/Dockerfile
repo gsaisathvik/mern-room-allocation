@@ -3,9 +3,11 @@ FROM node:18-alpine AS build
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
-COPY --chown=node:node . . # <-- CHANGE THIS LINE
-USER node
-RUN npm run build
+COPY . .
+RUN su -c "npm run build" node
+# The line above is a change
+# You can remove the "USER node" line if you want, but it won't hurt
+# to keep it there.
 
 # Step 2: Serve with Nginx
 FROM nginx:alpine
