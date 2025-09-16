@@ -2,10 +2,7 @@
 FROM node:18-alpine AS build
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build --prefix ./ # Run build from the local directory
-# This should fix it
+RUN npm install && npm run build
 
 # Step 2: Serve with Nginx
 FROM nginx:alpine
