@@ -3,13 +3,9 @@ FROM node:18-alpine AS build
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
-
-# Copy source code and change ownership
-COPY --chown=node:node . .
-
-# Switch user and run the build
-USER node
-RUN npm run build
+COPY . .
+RUN npm run build --prefix ./ # Run build from the local directory
+# This should fix it
 
 # Step 2: Serve with Nginx
 FROM nginx:alpine
