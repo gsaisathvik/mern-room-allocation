@@ -3,9 +3,9 @@ FROM node:18-alpine AS build
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
-RUN chmod +x node_modules/.bin/vite  # <-- ADD THIS LINE
 COPY . .
-RUN npm run build
+USER node
+RUN ["npm", "run", "build"] # <-- Change this line
 
 # Step 2: Serve with Nginx
 FROM nginx:alpine
