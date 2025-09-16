@@ -4,10 +4,12 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN su -c "npm run build" node
-# The line above is a change
-# You can remove the "USER node" line if you want, but it won't hurt
-# to keep it there.
+# Temporarily switch back to root to force the build
+# This is a less secure but reliable fix
+USER root 
+RUN npm run build
+# Switch to a non-root user for the final image if needed
+USER node 
 
 # Step 2: Serve with Nginx
 FROM nginx:alpine
