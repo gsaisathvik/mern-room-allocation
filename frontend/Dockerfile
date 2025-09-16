@@ -3,8 +3,8 @@ FROM node:18-alpine AS build
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
+RUN chmod +x node_modules/.bin/vite  # <-- ADD THIS LINE
 COPY . .
-USER node  # <-- This line is the fix
 RUN npm run build
 
 # Step 2: Serve with Nginx
