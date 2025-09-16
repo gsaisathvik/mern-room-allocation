@@ -1,13 +1,12 @@
-# Step 1: Build Vite app
-FROM node:18-alpine AS build
+# Stage 1: Build
+FROM node:20-alpine AS build   
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-USER node
 RUN npm run build
 
-# Step 2: Serve with Nginx
+# Stage 2: Serve
 FROM nginx:alpine
 WORKDIR /usr/share/nginx/html
 COPY --from=build /app/dist .
