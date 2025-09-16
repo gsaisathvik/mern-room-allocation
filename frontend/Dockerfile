@@ -9,17 +9,17 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
+# Install vite globally to ensure it's available
+RUN npm install -g vite
+
 # Copy rest of the code
 COPY . .
 
-# Fix vite binary permissions
-RUN chmod +x node_modules/.bin/vite
-
-# Then build
+# Build the frontend
 RUN npm run build
 
 
-# Stage 2: Serve
+# Stage 2: Serve with Nginx
 FROM nginx:alpine
 
 # Copy built frontend from stage 1
