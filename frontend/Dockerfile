@@ -4,10 +4,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-# Comment out the line below
-# RUN npm run build
-# Add a command to keep the container running
-CMD tail -f /dev/null
+RUN npm run build
 
 # Step 2: Serve with Nginx
 FROM nginx:alpine
