@@ -1,31 +1,24 @@
-# Stage 1: Build
-FROM node:18-alpine AS build
+# Use official Node.js image
+FROM node:18
 
+# Set working directory
 WORKDIR /app
 
-# Copy package.json first
+# Copy package.json and install dependencies
 COPY package*.json ./
-
-# Install dependencies
 RUN npm install
 
-# Ensure vite binary is executable
-RUN chmod +x node_modules/.bin/vite || true
-
-# Copy rest of the code
+# Copy the rest of the frontend code
 COPY . .
 
-# Build the frontend (still as root so vite works)
+# Build the frontend (run as root)
 RUN npm run build
 
-
-# Stage 2: Serve with Nginx
-FROM nginx:alpine
-
-# Copy built frontend from stage 1
-COPY --from=build /app/dist /usr/share/nginx/html
+# Use non-root user for security at runtime
+USER node
 
 # Expose port
 EXPOSE 80
 
-CMD ["npm", "run", "dev"]
+# Start frontend (use Vite preview or serve dist)
+CMD ["npx", "vite", "preview", "--host", "--port", "80"]
