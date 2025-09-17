@@ -28,4 +28,4 @@ COPY --from=build /app/dist /usr/share/nginx/html
 # Expose port
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["npm", "run", "dev"]
